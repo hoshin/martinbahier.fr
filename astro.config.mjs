@@ -6,8 +6,10 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://martinbahier.fr',
+  site: 'https://martinbahier.fr', // https://hoshin.github.io
   trailingSlash: 'never',
+  output: 'static',
+  base: '/',
   i18n: {
     defaultLocale: 'fr',
     locales: ['fr', 'en'],

@@ -25,7 +25,7 @@ const data = cv[lang];
       <div class="mt-4 flex flex-wrap gap-3 print:hidden">
         <button
           type="button"
-          onclick="window.print()"
+          data-print-cv
           class="inline-flex items-center gap-2 rounded-md bg-engineer-600 px-4 py-2 text-sm font-semibold text-white hover:bg-engineer-700"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
@@ -146,3 +146,11 @@ const data = cv[lang];
     </section>
   </article>
 </BaseLayout>
+
+<script>
+  // Wire the "Print / Save as PDF" button. Kept out of an inline onclick=
+  // handler so it loads as a same-origin script under CSP `script-src 'self'`.
+  document.querySelectorAll('[data-print-cv]').forEach((btn) => {
+    btn.addEventListener('click', () => window.print());
+  });
+</script>

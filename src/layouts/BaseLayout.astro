@@ -40,13 +40,13 @@ const altUrl = alternatePath
 // Content-Security-Policy delivered via <meta http-equiv>. GitHub Pages does
 // not expose HTTP response headers, so this is our only channel. Note that
 // some directives (frame-ancestors, report-uri, sandbox) are ignored in meta
-// form per spec; we keep the rest. The script-src hash matches the inline
-// theme bootstrap below — recompute with scripts/csp-hash.mjs if it changes.
+// form per spec; we keep the rest. The theme bootstrap is served as a static
+// asset (/theme-bootstrap.js) so it is covered by 'self' — no hash needed.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'sha256-cVGtBLqQAFuRMhJj2SQTesDL6VLtV3xv+GqBzWx3cEk='",
+  "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  "img-src 'self' data: https:",
   "font-src 'self'",
   "connect-src 'self'",
   "base-uri 'self'",
@@ -107,18 +107,10 @@ const robotsContent = noindex
     <!-- Fonts are self-hosted via @fontsource (imported in globals.css)
          to avoid any third-party request and IP leak to Google. -->
 
-    <!-- Theme bootstrap to avoid FOUC -->
-    <script is:inline>
-      (function () {
-        try {
-          var stored = localStorage.getItem('theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (stored === 'dark' || (!stored && prefersDark)) {
-            document.documentElement.classList.add('dark');
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <!-- Theme bootstrap to avoid FOUC. Served as a static asset so it is
+         covered by CSP `script-src 'self'` with no hash maintenance. Must run
+         before paint, hence no `defer`/`async` and placed in <head>. -->
+    <script is:inline src="/theme-bootstrap.js"></script>
   </head>
   <body class="flex min-h-screen flex-col">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-engineer-700 focus:shadow">
