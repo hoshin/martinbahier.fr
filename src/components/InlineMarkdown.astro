@@ -1,0 +1,39 @@
+---
+/**
+ * Renders a free-text string with inline markdown link support.
+ * See src/lib/renderInlineMarkdown.ts for the supported syntax.
+ *
+ * External links open in a new tab with rel="noopener noreferrer".
+ * Internal links (relative paths, anchors, mailto:) open in the same tab.
+ */
+import { renderInlineMarkdown } from '../lib/renderInlineMarkdown';
+
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+const tokens = renderInlineMarkdown(text);
+---
+{tokens.map((tok) => (
+  tok.type === 'text'
+    ? tok.value
+    : tok.external
+      ? (
+          <a
+            href={tok.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium text-engineer-700 underline decoration-engineer-300 underline-offset-2 hover:decoration-engineer-600 dark:text-engineer-300 dark:decoration-engineer-700 dark:hover:decoration-engineer-400"
+          >
+            {tok.text}
+          </a>
+        )
+      : (
+          <a
+            href={tok.href}
+            class="font-medium text-engineer-700 underline decoration-engineer-300 underline-offset-2 hover:decoration-engineer-600 dark:text-engineer-300 dark:decoration-engineer-700 dark:hover:decoration-engineer-400"
+          >
+            {tok.text}
+          </a>
+        )
+))}

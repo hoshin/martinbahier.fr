@@ -1,0 +1,133 @@
+---
+import '../styles/globals.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { type Lang, useTranslations } from '../i18n/ui';
+
+export interface Props {
+  title: string;
+  description?: string;
+  lang: Lang;
+  /** Path of the current page in the OTHER language (for hreflang and switcher). */
+  alternatePath?: string;
+  /** OG image relative URL or absolute URL */
+  ogImage?: string;
+  /** noindex this page */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Martin Bahier — Senior Software Engineer & Overwatch Caster.',
+  lang,
+  alternatePath,
+  ogImage = '/images/og-default.svg',
+  noindex = false,
+} = Astro.props;
+
+const t = useTranslations(lang);
+const siteName = 'Martin Bahier';
+const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).toString();
+
+// alternates for hreflang
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const altUrl = alternatePath
+  ? new URL(alternatePath, Astro.site).toString()
+  : new URL(`/${otherLang}`, Astro.site).toString();
+
+// Content-Security-Policy delivered via <meta http-equiv>. GitHub Pages does
+// not expose HTTP response headers, so this is our only channel. Note that
+// some directives (frame-ancestors, report-uri, sandbox) are ignored in meta
+// form per spec; we keep the rest. The script-src hash matches the inline
+// theme bootstrap below — recompute with scripts/csp-hash.mjs if it changes.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'sha256-cVGtBLqQAFuRMhJj2SQTesDL6VLtV3xv+GqBzWx3cEk='",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+  "manifest-src 'self'",
+  "upgrade-insecure-requests",
+].join('; ');
+
+// Robots directive. Always include AI opt-out signals (noai, noimageai,
+// SPC, DuckAssistBot, etc.) — informal but increasingly observed. When the
+// page sets `noindex`, override with the stricter directive.
+const robotsContent = noindex
+  ? 'noindex,nofollow,noai,noimageai'
+  : 'index,follow,noai,noimageai';
+---
+<!doctype html>
+<html lang={lang} class="scroll-pt-16">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Privacy & security headers (meta-equivalent; GitHub Pages exposes no
+         response-header config). Strict referrer policy, CSP, and AI opt-out. -->
+    <meta http-equiv="Content-Security-Policy" content={csp} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="robots" content={robotsContent} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={otherLang} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/fr', Astro.site).toString()} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
+    <meta property="og:locale:alternate" content={otherLang === 'fr' ? 'fr_FR' : 'en_US'} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title={`Blog (${lang})`} href={`/${lang}/rss.xml`} />
+
+    <!-- Fonts are self-hosted via @fontsource (imported in globals.css)
+         to avoid any third-party request and IP leak to Google. -->
+
+    <!-- Theme bootstrap to avoid FOUC -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-engineer-700 focus:shadow">
+      {t('nav.skipToContent')}
+    </a>
+    <Header lang={lang} alternatePath={alternatePath} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

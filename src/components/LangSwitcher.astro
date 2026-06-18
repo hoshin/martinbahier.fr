@@ -1,0 +1,22 @@
+---
+import { type Lang, languages, useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternatePath?: string;
+}
+
+const { lang, alternatePath } = Astro.props;
+const t = useTranslations(lang);
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const href = alternatePath ?? `/${otherLang}`;
+---
+<a
+  href={href}
+  hreflang={otherLang}
+  aria-label={t('lang.switch')}
+  title={languages[otherLang]}
+  class="inline-flex h-9 items-center rounded-md border border-slate-200 px-2.5 text-xs font-semibold uppercase tracking-wider text-slate-700 transition hover:border-engineer-400 hover:text-engineer-700 dark:border-slate-700 dark:text-slate-200 dark:hover:border-engineer-500 dark:hover:text-engineer-300"
+>
+  {otherLang}
+</a>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroSplit from '../../components/HeroSplit.astro';
+import SectionAbout from '../../components/SectionAbout.astro';
+import SectionCV from '../../components/SectionCV.astro';
+import SectionBlog from '../../components/SectionBlog.astro';
+import SectionLinks from '../../components/SectionLinks.astro';
+
+const lang = 'fr' as const;
+---
+<BaseLayout
+  lang={lang}
+  title="Martin Bahier — Senior Software Engineer & Caster Overwatch"
+  description="Site personnel de Martin Bahier — développeur senior à Paris et caster Overwatch sur la scène francophone."
+  alternatePath="/en"
+>
+  <HeroSplit lang={lang} />
+  <SectionAbout lang={lang} />
+  <SectionCV lang={lang} />
+  <SectionBlog lang={lang} />
+  <SectionLinks lang={lang} />
+</BaseLayout>

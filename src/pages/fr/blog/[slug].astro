@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostLayout from '../../../layouts/BlogPostLayout.astro';
+import { postSlug } from '../../../lib/date';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.lang === 'fr' && !data.draft);
+  return posts.map((post) => ({
+    params: { slug: postSlug(post.id) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// look for an EN counterpart with the same base slug
+const baseSlug = postSlug(post.id);
+const enPosts = await getCollection('blog', ({ data }) => data.lang === 'en' && !data.draft);
+const enMatch = enPosts.find((p) => postSlug(p.id) === baseSlug);
+const alternatePath = enMatch
+  ? `/en/blog/${postSlug(enMatch.id)}`
+  : '/en/blog';
+---
+<BlogPostLayout
+  lang="fr"
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  tags={post.data.tags}
+  rawContent={post.body ?? ''}
+  alternatePath={alternatePath}
+>
+  <Content />
+</BlogPostLayout>

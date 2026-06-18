@@ -1,0 +1,27 @@
+---
+// Root: redirect to the user's preferred language, defaulting to /fr
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Martin Bahier</title>
+    <meta name="description" content="Martin Bahier — Senior Software Engineer & Overwatch Caster." />
+    <meta http-equiv="refresh" content="0; url=/fr" />
+    <link rel="canonical" href="/fr" />
+    <script is:inline>
+      (function () {
+        try {
+          var lang = (navigator.language || 'fr').toLowerCase();
+          var target = lang.startsWith('en') ? '/en' : '/fr';
+          window.location.replace(target);
+        } catch (e) {
+          window.location.replace('/fr');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/fr">/fr</a> · <a href="/en">/en</a>.</p>
+  </body>
+</html>

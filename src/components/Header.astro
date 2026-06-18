@@ -1,0 +1,78 @@
+---
+import { type Lang, useTranslations } from '../i18n/ui';
+import LangSwitcher from './LangSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Lang;
+  alternatePath?: string;
+}
+
+const { lang, alternatePath } = Astro.props;
+const t = useTranslations(lang);
+
+const navItems = [
+  { href: `/${lang}#about`, label: t('nav.about') },
+  { href: `/${lang}#cv`, label: t('nav.cv') },
+  { href: `/${lang}/blog`, label: t('nav.blog') },
+  { href: `/${lang}#links`, label: t('nav.links') },
+];
+---
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+  <div class="container-wide flex h-16 items-center justify-between">
+    <a href={`/${lang}`} class="flex items-center gap-2 font-bold tracking-tight">
+      <span class="inline-block h-2.5 w-2.5 rounded-full bg-engineer-500"></span>
+      <span class="inline-block h-2.5 w-2.5 -ml-1 rounded-full bg-caster-500"></span>
+      <span>Martin Bahier</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="text-slate-600 transition hover:text-engineer-700 dark:text-slate-300 dark:hover:text-engineer-300"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <LangSwitcher lang={lang} alternatePath={alternatePath} />
+      <ThemeToggle lang={lang} />
+      <button
+        type="button"
+        id="mobile-menu-button"
+        aria-label="Menu"
+        class="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden border-t border-slate-200 md:hidden dark:border-slate-800">
+    <nav class="container-wide flex flex-col gap-1 py-3 text-sm font-medium">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="rounded-md px-3 py-2 text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

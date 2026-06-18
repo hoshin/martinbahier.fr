@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { cv } from '../../data/cv';
+import { useTranslations } from '../../i18n/ui';
+import InlineMarkdown from '../../components/InlineMarkdown.astro';
+import Tournament from '../../components/Tournament.astro';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+const data = cv[lang];
+---
+<BaseLayout
+  lang={lang}
+  title="Resume — Martin Bahier"
+  description="Resume of Martin Bahier, Senior Software Engineer."
+  alternatePath="/fr/cv"
+>
+  <article class="container-prose py-16 print:py-0">
+    <header class="border-b border-slate-200 pb-6 dark:border-slate-800">
+      <p class="font-mono text-xs uppercase tracking-widest text-engineer-700 dark:text-engineer-400">
+        {t('cv.title')}
+      </p>
+      <h1 class="mt-2 text-4xl font-extrabold tracking-tight">Martin Bahier</h1>
+      <p class="mt-1 text-slate-600 dark:text-slate-300">{data.headline}</p>
+      <div class="mt-4 flex flex-wrap gap-3 print:hidden">
+        <button
+          type="button"
+          onclick="window.print()"
+          class="inline-flex items-center gap-2 rounded-md bg-engineer-600 px-4 py-2 text-sm font-semibold text-white hover:bg-engineer-700"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" rx="1" />
+          </svg>
+          {t('cv.print')}
+        </button>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="section-title-engineer text-xl font-bold">{t('cv.experience')}</h2>
+      <ol class="mt-4 space-y-6">
+        {data.experience.map((exp) => (
+          <li>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="flex items-center gap-2 text-base font-bold">
+                {exp.logoUrl && (
+                  <img
+                    src={exp.logoUrl}
+                    alt={`${exp.company} logo`}
+                    loading="lazy"
+                    decoding="async"
+                    class:list={[
+                      'h-6 w-6 shrink-0 self-center rounded object-contain p-0.5 ring-1 ring-slate-200 dark:ring-slate-700',
+                      !exp.logoBG && 'bg-white',
+                    ]}
+                    style={exp.logoBG ? `background-color: ${exp.logoBG}` : undefined}
+                  />
+                )}
+                <span>
+                  {exp.role} <span class="font-medium text-slate-500">· {exp.company}</span>
+                </span>
+              </h3>
+              <span class="font-mono text-sm text-slate-500">{exp.start} — {exp.end}</span>
+            </div>
+            {exp.location && <p class="text-sm text-slate-500">{exp.location}</p>}
+            {exp.summary && (
+              <p class="mt-2 text-slate-700 dark:text-slate-300"><InlineMarkdown text={exp.summary} /></p>
+            )}
+            {exp.bullets.length > 0 && (
+              <ul class="mt-2 list-disc space-y-1 pl-5 text-slate-700 dark:text-slate-300">
+                {exp.bullets.map((b) => <li><InlineMarkdown text={b} /></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="section-title-engineer text-xl font-bold">{t('cv.education')}</h2>
+      <ul class="mt-4 space-y-3">
+        {data.education.map((ed) => (
+          <li>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <span class="font-bold">{ed.school}</span>
+              <span class="font-mono text-sm text-slate-500">{ed.start} — {ed.end}</span>
+            </div>
+            <p class="text-slate-600 dark:text-slate-400">{ed.degree}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-10 grid gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="section-title-engineer text-xl font-bold">{t('cv.skills')}</h2>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {data.skills.map((s) => (
+            <li class="rounded-full bg-engineer-50 px-3 py-1 text-sm font-medium text-engineer-800 dark:bg-engineer-900/40 dark:text-engineer-100">
+              {s}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="section-title-engineer text-xl font-bold">{t('cv.languages')}</h2>
+        <ul class="mt-4 space-y-2">
+          {data.languages.map((l) => (
+            <li class="flex items-baseline justify-between">
+              <span class="font-semibold">{l.name}</span>
+              <span class="text-slate-500">{l.level}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="section-title-caster text-xl font-bold">{t('cv.casting')}</h2>
+      <ul class="mt-4 space-y-3">
+        {data.casting.map((c) => (
+          <li>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <span class="font-bold">{c.title}</span>
+              {c.year && <span class="font-mono text-sm text-slate-500">{c.year}</span>}
+            </div>
+            {c.detail && <p class="text-slate-600 dark:text-slate-400"><InlineMarkdown text={c.detail} /></p>}
+          </li>
+        ))}
+      </ul>
+
+      {data.tournaments && data.tournaments.length > 0 && (
+        <div class="mt-8">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500">
+            {t('cv.tournaments')}
+          </h3>
+          <ul class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {data.tournaments.map((tn) => (
+              <li><Tournament item={tn} /></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  </article>
+</BaseLayout>

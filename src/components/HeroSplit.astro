@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import { type Lang, useTranslations } from '../i18n/ui';
+import engineerImg from '../content/images/hoshin-dev-2.jpg';
+import casterImg from '../content/images/hoshin-caster.jpg';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="hero-split relative overflow-hidden text-white">
+  <!-- Background image layer: engineer side -->
+  <div class="hero-split__bg hero-split__bg--engineer" aria-hidden="true">
+    <Image
+      src={engineerImg}
+      alt=""
+      widths={[640, 1024, 1536, 2048]}
+      sizes="(max-width: 768px) 100vw, 60vw"
+      class="hero-split__img"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero-split__tint hero-split__tint--engineer"></div>
+  </div>
+
+  <!-- Background image layer: caster side -->
+  <div class="hero-split__bg hero-split__bg--caster" aria-hidden="true">
+    <Image
+      src={casterImg}
+      alt=""
+      widths={[640, 1024, 1536, 2048]}
+      sizes="(max-width: 768px) 100vw, 60vw"
+      class="hero-split__img"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero-split__tint hero-split__tint--caster"></div>
+  </div>
+
+  <div class="container-wide relative grid min-h-[80vh] grid-cols-1 gap-10 py-20 md:grid-cols-2 md:gap-6 md:py-28">
+    <!-- Engineer side -->
+    <div class="flex flex-col items-start justify-center md:pr-8">
+      <span class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider backdrop-blur">
+        <span class="h-1.5 w-1.5 rounded-full bg-engineer-200"></span>
+        {t('hero.engineer.role')}
+      </span>
+      <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+        <!--Martin <span class="block">Bahier</span>-->
+        {lang === 'fr' ? "Au quotidien" : 'Every day'}
+      </h1>
+      <p class="mt-4 max-w-md text-base leading-relaxed text-engineer-50 sm:text-lg">
+        {t('hero.engineer.tagline')}
+      </p>
+      <a
+        href={`/${lang}/cv`}
+        class="mt-6 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-engineer-800 shadow-sm transition hover:bg-engineer-50"
+      >
+        {t('hero.engineer.cta')}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="h-4 w-4">
+          <path d="M5 12h14M13 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Caster side -->
+    <div class="flex flex-col items-start justify-center md:items-end md:text-right md:pl-8">
+      <span class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider backdrop-blur">
+        <span class="h-1.5 w-1.5 rounded-full bg-caster-200"></span>
+        {t('hero.caster.role')}
+      </span>
+      <h2 class="text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+        {lang === 'fr' ? "Dans le monde de l'Esport" : 'In the Esports world'}
+      </h2>
+      <p class="mt-4 max-w-md text-base leading-relaxed text-caster-50 sm:text-lg md:ml-auto">
+        {t('hero.caster.tagline')}
+      </p>
+      <a
+        href="https://www.hoshin-casts.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-6 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-caster-800 shadow-sm transition hover:bg-caster-50"
+      >
+        {t('hero.caster.cta')}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="h-4 w-4">
+          <path d="M14 3h7v7M21 3l-9 9M21 14v5a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h5" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+---
+/**
+ * A single tournament card for the casting-section showcase.
+ * Renders the tournament's logo in a fixed-height container with optional
+ * background override, plus a name + role/year label underneath.
+ *
+ * Purely informational — no link wrapping by design.
+ */
+import type { CVTournament } from '../data/cv';
+
+interface Props {
+  item: CVTournament;
+}
+const { item } = Astro.props;
+const meta = [item.role, item.year].filter(Boolean).join(' · ');
+---
+<div class="flex flex-col items-center">
+  <div
+    class:list={[
+      'flex h-16 w-full items-center justify-center rounded-lg p-3 ring-1 ring-slate-200 dark:ring-slate-700',
+      !item.logoBG && 'bg-white',
+    ]}
+    style={item.logoBG ? `background-color: ${item.logoBG}` : undefined}
+  >
+    <img
+      src={item.logoUrl}
+      alt={`${item.name} logo`}
+      loading="lazy"
+      decoding="async"
+      class="max-h-full max-w-full object-contain"
+    />
+  </div>
+  <div class="mt-2 text-center">
+    <p class="text-sm font-semibold">{item.name}</p>
+    {meta && <p class="text-xs text-slate-500 dark:text-slate-400">{meta}</p>}
+  </div>
+</div>
