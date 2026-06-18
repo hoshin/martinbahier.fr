@@ -81,47 +81,7 @@ The on-page CV at `/{lang}/cv` is rendered from `src/data/cv.ts`. The download b
   Most handles are marked `TODO`; replace them with your real URLs.
 - **UI strings**: `src/i18n/ui.ts`
 
-## Deployment (Gandi Web Hosting, SFTP)
-
-1. Copy `.env.example` to `.env` and fill in your Gandi SFTP credentials:
-
-   ```
-   GANDI_SFTP_HOST=sftp.gandi.net
-   GANDI_SFTP_PORT=22
-   GANDI_SFTP_USER=your-gandi-user
-   GANDI_SFTP_PASS=your-password
-   GANDI_SFTP_REMOTE_PATH=/lamp0/web/vhosts/martinbahier.fr/htdocs
-   ```
-
-   (Get the exact remote path from your Gandi admin panel under **Web** › your hosting › **SFTP**.)
-
-2. Deploy:
-
-   ```bash
-   npm run deploy                # builds and uploads dist/
-   node scripts/deploy.mjs --dry-run   # preview without uploading
-   node scripts/deploy.mjs --clean     # remove remote files no longer present locally
-   ```
-
-   `npm run deploy` runs `astro build` then the SFTP upload.
-
-### Notes for Gandi static hosting
-
-- Astro's static output is just HTML/CSS/JS — Gandi Simple Hosting serves it as-is. No PHP/Node runtime needed.
-- The root redirect at `/` uses a `<meta http-equiv="refresh">` so it works on a static host.
-- If you want pretty URLs (`/fr/blog/foo` instead of `/fr/blog/foo/index.html`), Gandi serves `index.html` automatically inside directories — Astro's `trailingSlash: 'never'` config is compatible.
-- If you ever want `.fr` → `www.` (or vice versa) canonical redirects, add a small `.htaccess` to `public/` so it ships in `dist/`.
-
-## TODO (content)
-
-Search the repo for `TODO` to find the spots you'll want to fill in:
-
-- Real social handles in `src/data/socials.ts`
-- Confirmed dates / past employers / education details in `src/data/cv.ts`
-- Real CV PDFs in `public/cv/`
-- Optional: avatar / hero imagery in `public/images/`
-
 ## License
 
-Site code: MIT (or whatever you prefer — update this line).
+Site code: MIT.
 Content (text, photos, CV): all rights reserved.
