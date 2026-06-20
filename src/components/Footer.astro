@@ -1,6 +1,6 @@
 ---
 import { type Lang, useTranslations } from '../i18n/ui';
-import { socials } from '../data/socials';
+import { proSocials, casterSocials } from '../data/socials';
 
 interface Props {
   lang: Lang;
@@ -16,19 +16,50 @@ const year = new Date().getFullYear();
       <p>© {year} Martin Bahier. {t('footer.rights')}</p>
       <p class="mt-1">{t('footer.builtWith')}</p>
     </div>
-    <ul class="flex flex-wrap items-center gap-4 text-sm">
-      {socials.map((s) => (
-        <li>
-          <a
-            href={s.href}
-            target={s.href.startsWith('http') ? '_blank' : undefined}
-            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            class="text-slate-600 hover:text-engineer-700 dark:text-slate-300 dark:hover:text-engineer-300"
-          >
-            {s.label}
-          </a>
-        </li>
-      ))}
-    </ul>
+
+    <!-- Two link groups, dev (engineer/blue) on the left and caster (orange)
+         on the right, separated by a vertical pipe on >= sm viewports. The
+         pipe collapses to an horizontal rule on narrow screens to keep the
+         visual grouping legible without forcing horizontal scrolling. -->
+    <div class="flex flex-col items-start gap-3 text-sm sm:flex-row sm:items-center sm:gap-4">
+      <ul class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {proSocials.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+              rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              class="text-engineer-700 hover:text-engineer-900 dark:text-engineer-300 dark:hover:text-engineer-100"
+            >
+              {s.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <span
+        aria-hidden="true"
+        class="hidden h-4 w-px bg-slate-300 dark:bg-slate-700 sm:inline-block"
+      ></span>
+      <hr
+        aria-hidden="true"
+        class="w-full border-slate-200 dark:border-slate-700 sm:hidden"
+      />
+
+      <ul class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {casterSocials.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+              rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              class="text-caster-700 hover:text-caster-900 dark:text-caster-300 dark:hover:text-caster-100"
+            >
+              {s.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </footer>

@@ -1,0 +1,11 @@
+# ai.txt — declared opt-out of AI / LLM training and ingestion.
+# https://site.spawning.ai/spaces/ai-txt
+# Mirror of the robots.txt directives for crawlers that recognise this file.
+
+User-Agent: *
+Disallow: /
+Disallow-AI: /
+Disallow-AI-Training: /
+Disallow-Generative-AI: /
+
+Contact: https://martinbahier.fr

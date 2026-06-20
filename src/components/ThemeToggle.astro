@@ -19,12 +19,7 @@ const t = useTranslations(lang);
   </svg>
 </button>
 
-<script>
-  const btn = document.getElementById('theme-toggle');
-  btn?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    try {
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    } catch (e) {}
-  });
-</script>
+<!-- Handler is shipped as a static asset (no Vite processing) so the emitted
+     HTML references it via `src=` and CSP `script-src 'self'` covers it
+     without any inline-script hash. -->
+<script is:inline src="/theme-toggle.js" defer></script>

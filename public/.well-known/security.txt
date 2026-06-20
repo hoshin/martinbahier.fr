@@ -1,0 +1,8 @@
+# security.txt — RFC 9116
+# Disclosure contact for security issues affecting martinbahier.fr.
+# This file is unsigned; the canonical URL below establishes authenticity.
+
+Contact: https://github.com/hoshin
+Expires: 2027-06-18T00:00:00Z
+Preferred-Languages: fr, en
+Canonical: https://martinbahier.fr/.well-known/security.txt

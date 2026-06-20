@@ -147,10 +147,7 @@ const data = cv[lang];
   </article>
 </BaseLayout>
 
-<script>
-  // Wire the "Print / Save as PDF" button. Kept out of an inline onclick=
-  // handler so it loads as a same-origin script under CSP `script-src 'self'`.
-  document.querySelectorAll('[data-print-cv]').forEach((btn) => {
-    btn.addEventListener('click', () => window.print());
-  });
-</script>
+<!-- Print handler is shipped as a static asset (no Vite processing) so the
+     emitted HTML references it via `src=` and CSP `script-src 'self'` covers
+     it without any inline-script hash. -->
+<script is:inline src="/print-cv.js" defer></script>

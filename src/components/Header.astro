@@ -69,10 +69,7 @@ const navItems = [
   </div>
 </header>
 
-<script>
-  const btn = document.getElementById('mobile-menu-button');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
-  });
-</script>
+<!-- Handler is shipped as a static asset (no Vite processing) so the emitted
+     HTML references it via `src=` and CSP `script-src 'self'` covers it
+     without any inline-script hash. -->
+<script is:inline src="/mobile-menu.js" defer></script>
