@@ -100,6 +100,13 @@ export const socials: Social[] = [
     group: 'caster',
     icon: 'lucide:mail',
   },
+  {
+    id: 'liquipedia',
+    label: 'Liquipedia',
+    href: 'https://liquipedia.net/overwatch/Hoshin',
+    group: 'caster',
+    icon: 'lucide:globe-check',
+  },
 ];
 
 export const proSocials = socials.filter((s) => s.group === 'pro');
